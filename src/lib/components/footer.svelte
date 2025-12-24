@@ -1,4 +1,9 @@
+<script>
+    const currentYear = new Date().getFullYear();
 
+</script>
+    
+    
     <!-- Main Footer Section Start -->
     <footer class="main-footer">
         <div class="container">
@@ -14,18 +19,18 @@
 
                         <!-- Footer Contact Info Start -->
                         <div class="footer-contact-info">
-                            <h2><a href="#/">info@domainname.com</a></h2>
-                            <h3><a href="tel:456789235">+01 456 789 235</a></h3>
-                            <p>3891 ranchview dr. richardson, california 62639</p>
+                            <h2><a href="#/">info@delimarealtors.com</a></h2>
+                            <h3><a href="tel:254701432884">+254 701 432 884</a></h3>
+                            <p>Argwings Kodhek Road,Kilimani,Nairobi</p>
                         </div>
                         <!-- Footer Contact Info End -->
 
                         <!-- Footer Social Icon Start -->
                         <div class="footer-social-icon">
                             <ul>
-                                <li><a href="#/"><i class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="#/"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#/"><i class="fa-brands fa-dribbble"></i></a></li>
+                                <li><a href="#/" title="drible"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="#/" title="facebook"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#/" title="instagram"><i class="fa-brands fa-dribbble"></i></a></li>
                             </ul>
                         </div>
                         <!-- Footer Social Icon End -->
@@ -57,7 +62,7 @@
 
                     <!-- Footer Copyright Text Start -->
                     <div class="footer-copyright-text">
-                        <p>Copyright © 2025 All Rights Reserved.</p>
+                        <p>Copyright © {currentYear} All Rights Reserved.</p>
                     </div>
                     <!-- Footer Copyright Text End -->
                 </div>

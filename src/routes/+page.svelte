@@ -16,7 +16,9 @@
         <div class="hero-bg-video">
             <!-- Selfhosted Video Start -->
             <!-- <video autoplay muted loop id="myVideo"><source src="/lib/assets/hero-bg-video.mp4" type="video/mp4"></video> -->
-            <video autoplay muted loop id="myVideo"><source src="https://demo.awaikenthemes.com/assets/videos/inclub-video.mp4" type="video/mp4"></video>
+            <video autoplay muted loop id="myVideo">
+            <source src="https://demo.awaikenthemes.com/assets/videos/inclub-video.mp4" type="video/mp4">
+            </video>
             
             <!-- Selfhosted Video End -->
 
@@ -50,9 +52,9 @@
                     <!-- Hero Social Media Start -->
                     <div class="hero-social-media">
                         <ul>
-                            <li><a href="#/"><i class="fa-brands fa-dribbble"></i></a></li>
-                            <li><a href="#/"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#/"><i class="fa-brands fa-instagram"></i></a></li>
+                            <li><a href="#/" title="dribble"><i class="fa-brands fa-dribbble"></i></a></li>
+                            <li><a href="#/" title="facebook"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#/" title="instagram"><i class="fa-brands fa-instagram"></i></a></li>
                         </ul>
                         <h3>FOLLOW US</h3>
                     </div>
@@ -1532,7 +1534,7 @@
                         <div class="post-item-body">
                             <!-- Post Item Content Start -->
                             <div class="post-item-content">
-                                <h2><a href="blog-single.html">Home buying process: a step-by-step guide</a></h2>
+                                <h2><a href="/blog-single">Home buying process: a step-by-step guide</a></h2>
                                 <p>This post breaks down the home buying process into easy-to-follow steps...</p>
                             </div>
                             <!-- Post Item Content End -->
