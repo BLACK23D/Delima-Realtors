@@ -1,4 +1,3 @@
-<main>
     
     <!-- Page Contact Start -->
     <div class="page-contact-us">
@@ -140,4 +139,3 @@
     </div>
     <!-- Google Map End -->
 
-</main>
