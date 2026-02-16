@@ -17,7 +17,7 @@
 
         <div style="margin-bottom: 50px;">
             <h2 style="color: #d4af37; font-size: 1.8rem; margin-bottom: 15px;">Our Mission</h2>
-            <p style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px;\">Our mission is to make real estate transactions smooth and successful for our clients. We understand the unique challenges and opportunities of the Nairobi real estate market. We prioritise the individual needs and preferences of our clients, tailoring our approach to guarantee a bespoke experience.</p>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px;">Our mission is to make real estate transactions smooth and successful for our clients. We understand the unique challenges and opportunities of the Nairobi real estate market. We prioritise the individual needs and preferences of our clients, tailoring our approach to guarantee a bespoke experience.</p>
         </div>
 
         <div style="margin-bottom: 50px;">

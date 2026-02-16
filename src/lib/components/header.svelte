@@ -16,11 +16,11 @@
 				<div class="container">
 					<!-- Logo Start -->
 					<a class="navbar-brand" href="/">
-						<img src="/lib/assets/logo.svg" alt="Logo">
-					</a>
-					<!-- Logo End -->
+					<img src="/lib/assets/logo/LogoMakerCa-1771232657338-removebg-preview.png" alt="Delima Realtors Logo">
+				</a>
+				<!-- Logo End -->
 
-		<!-- Main Menu Start -->
+				<!-- Main Menu Start -->
 					<div class="collapse navbar-collapse main-menu">
                         <div class="nav-menu-wrapper">
                               

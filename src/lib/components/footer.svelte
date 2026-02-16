@@ -13,7 +13,7 @@
                     <div class="footer-content">
                         <!-- Footer Logo Start -->
                         <div class="footer-logo">
-                            <img src="/lib/assets/footer-logo.svg" alt="">
+                            <img src="/lib/assets/logo/LogoMakerCa-1771232657338-removebg-preview.png" alt="Delima Realtors Logo">
                         </div>
                         <!-- Footer Logo End -->
 

@@ -460,6 +460,16 @@ header.main-header .header-sticky.active{
 .navbar-brand{
 	padding: 0;
 	margin: 0;
+	display: flex;
+	align-items: center;
+	height: 85px;
+}
+
+.navbar-brand img{
+	height: 80px;
+	width: auto;
+	object-fit: contain;
+	max-width: 100%;
 }
 
 .main-menu .nav-menu-wrapper{
@@ -2293,8 +2303,10 @@ header.main-header .header-sticky.active{
 }
 
 .footer-logo img{
-    width: 100%;
-    max-width: 180px;
+    height: 85px;
+    width: auto;
+    max-width: 300px;
+    object-fit: contain;
 }
 
 .footer-contact-info{
@@ -4172,7 +4184,9 @@ header.main-header .header-sticky.active{
 	}
 
 	.navbar-brand img{
-		max-width: 140px;
+		max-width: none;
+		height: 70px;
+		width: auto;
 	}
 
 	.main-menu ul li.highlighted-menu{
