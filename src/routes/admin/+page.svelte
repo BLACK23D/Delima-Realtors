@@ -37,31 +37,57 @@
 					<p>Manage your real estate projects and properties from here.</p>
 				</div>
 
-				<div class="menu-grid">
-					<a href="/admin/dashboard" class="menu-card">
-						<div class="card-icon">📋</div>
-						<h3>Project Management</h3>
-						<p>Add, view, and delete property listings</p>
-					</a>
-
-					<div class="menu-card disabled">
-						<div class="card-icon">👥</div>
-						<h3>User Management</h3>
-						<p>Coming soon</p>
-					</div>
-
-					<div class="menu-card disabled">
-						<div class="card-icon">📊</div>
-						<h3>Analytics</h3>
-						<p>Coming soon</p>
-					</div>
-
-					<div class="menu-card disabled">
-						<div class="card-icon">⚙️</div>
-						<h3>Settings</h3>
-						<p>Coming soon</p>
-					</div>
+			<div class="features-grid">
+				<div class="feature-card">
+					<div class="feature-icon">➕</div>
+					<h3>Add New Properties</h3>
+					<p>Create new property listings with detailed information including photos, descriptions, pricing, and more. Forms are intuitive and easy to use.</p>
 				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">👁️</div>
+					<h3>View All Projects</h3>
+					<p>See all your properties in a beautifully organized grid. View images, prices, locations, and details at a glance.</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">🗑️</div>
+					<h3>Delete Projects</h3>
+					<p>Remove properties from your listing with one click. The system will ask for confirmation to prevent accidental deletion.</p>
+				</div>
+
+				<div class="feature-card">
+					<div class="feature-icon">⚡</div>
+					<h3>Real-Time Sync</h3>
+					<p>All changes are instantly synced with your database. Your website updates automatically when you add or remove properties.</p>
+				</div>
+			</div>
+
+			<div class="menu-grid">
+				<a href="/admin/dashboard" class="menu-card">
+					<div class="card-icon">📋</div>
+					<h3>Project Management</h3>
+					<p>Add, view, and delete property listings</p>
+				</a>
+
+				<a href="/admin/contacts" class="menu-card">
+					<div class="card-icon">📧</div>
+					<h3>Inquiries Management</h3>
+					<p>View and manage customer contact inquiries</p>
+				</a>
+
+				<div class="menu-card disabled">
+					<div class="card-icon">👥</div>
+					<h3>User Management</h3>
+					<p>Coming soon</p>
+				</div>
+
+				<div class="menu-card disabled">
+					<div class="card-icon">📊</div>
+					<h3>Analytics</h3>
+					<p>Coming soon</p>
+				</div>
+			</div>
 
 				<div class="info-section">
 					<h3>Quick Help</h3>
@@ -149,6 +175,48 @@
 	.welcome-section p {
 		color: #666;
 		font-size: 16px;
+	}
+
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 20px;
+		margin-bottom: 50px;
+	}
+
+	.feature-card {
+		background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+		padding: 25px 20px;
+		border-radius: 8px;
+		border-left: 4px solid #d4af37;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		text-align: center;
+		transition: all 0.3s ease;
+	}
+
+	.feature-card:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+		border-left-color: #0066cc;
+	}
+
+	.feature-icon {
+		font-size: 40px;
+		margin-bottom: 12px;
+		display: block;
+	}
+
+	.feature-card h3 {
+		color: #1f1810;
+		margin: 0 0 10px 0;
+		font-size: 18px;
+	}
+
+	.feature-card p {
+		color: #666;
+		margin: 0;
+		font-size: 14px;
+		line-height: 1.6;
 	}
 
 	.menu-grid {

@@ -2,15 +2,11 @@
 	import { onMount } from 'svelte';
 	import { adminAuth } from '$lib/stores/adminAuth';
 
-	let isLoggedIn = false;
+	let isLoading = true;
 
 	onMount(() => {
-		adminAuth.subscribe((auth) => {
-			isLoggedIn = auth.isLoggedIn;
-		});
+		isLoading = false;
 	});
 </script>
 
-{#if isLoggedIn}
-	<slot />
-{/if}
+<slot />

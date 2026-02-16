@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { adminAuth, logoutAdmin } from '$lib/stores/adminAuth';
@@ -8,6 +8,10 @@
 	let projects: any[] = [];
 	let loading = false;
 	let showForm = false;
+	let editingId: string | null = null;
+	let uploading = false;
+	let imageFile: File | null = null;
+	let imagePreview = '';
 
 	// Form data
 	let formData = {
@@ -18,11 +22,18 @@
 		bedrooms: '',
 		bathrooms: '',
 		imageUrl: '',
-		category: 'Residential'
+		category: 'Residential',
+		status: 'published',
+		featured: false,
+		amenities: ''
 	};
 
 	let error = '';
 	let success = '';
+
+	// Filter and sort
+	let filterLocation = '';
+	let sortBy = 'recent';
 
 	onMount(() => {
 		adminAuth.subscribe((auth) => {
@@ -37,12 +48,82 @@
 
 	async function loadProjects() {
 		try {
-			const { data, error: err } = await supabase.from('projects').select('*');
+			let query = supabase.from('projects').select('*');
+			
+			const { data, error: err } = await query;
 			if (err) throw err;
-			projects = data || [];
+			
+			// Filter and sort
+			let filtered = data || [];
+			if (filterLocation) {
+				filtered = filtered.filter(p => 
+					p.location.toLowerCase().includes(filterLocation.toLowerCase())
+				);
+			}
+			
+			if (sortBy === 'recent') {
+				filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+			} else if (sortBy === 'featured') {
+				filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+			}
+			
+			projects = filtered;
 		} catch (err) {
 			console.error('Error loading projects:', err);
+			error = 'Failed to load projects';
 		}
+	}
+
+	function openEditForm(project: any) {
+		editingId = project.id;
+		formData = { ...project };
+		imagePreview = project.imageUrl;
+		showForm = true;
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function resetForm() {
+		editingId = null;
+		formData = {
+			title: '',
+			description: '',
+			location: '',
+			price: '',
+			bedrooms: '',
+			bathrooms: '',
+			imageUrl: '',
+			category: 'Residential',
+			status: 'published',
+			featured: false,
+			amenities: ''
+		};
+		imageFile = null;
+		imagePreview = '';
+		error = '';
+	}
+
+	async function handleImageUpload(e: Event) {
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		imageFile = file;
+		imagePreview = URL.createObjectURL(file);
+	}
+
+	async function uploadImageToSupabase(file: File): Promise<string> {
+		const fileName = `${Date.now()}-${file.name}`;
+		const { data, error: err } = await supabase.storage
+			.from('project-images')
+			.upload(fileName, file);
+
+		if (err) throw new Error(`Upload failed: ${err.message}`);
+
+		const { data: publicData } = supabase.storage
+			.from('project-images')
+			.getPublicUrl(fileName);
+
+		return publicData.publicUrl;
 	}
 
 	async function handleSubmit() {
@@ -50,40 +131,52 @@
 		success = '';
 		loading = true;
 
-		if (
-			!formData.title ||
-			!formData.description ||
-			!formData.location ||
-			!formData.price ||
-			!formData.imageUrl
-		) {
+		if (!formData.title || !formData.description || !formData.location || !formData.price) {
 			error = 'Please fill in all required fields';
 			loading = false;
 			return;
 		}
 
 		try {
-			const { data, error: err } = await supabase.from('projects').insert([formData]);
+			let imageUrl = formData.imageUrl;
 
-			if (err) throw err;
+			// Upload image if a new one was selected
+			if (imageFile) {
+				uploading = true;
+				imageUrl = await uploadImageToSupabase(imageFile);
+				uploading = false;
+			}
 
-			success = 'Project added successfully!';
-			formData = {
-				title: '',
-				description: '',
-				location: '',
-				price: '',
-				bedrooms: '',
-				bathrooms: '',
-				imageUrl: '',
-				category: 'Residential'
+			const dataToSubmit = {
+				...formData,
+				imageUrl,
+				updated_at: new Date().toISOString()
 			};
+
+			if (editingId) {
+				// Update existing project
+				const { error: err } = await supabase
+					.from('projects')
+					.update(dataToSubmit)
+					.eq('id', editingId);
+
+				if (err) throw err;
+				success = 'Project updated successfully!';
+			} else {
+				// Create new project
+				const { error: err } = await supabase.from('projects').insert([dataToSubmit]);
+				if (err) throw err;
+				success = 'Project added successfully!';
+			}
+
+			resetForm();
 			showForm = false;
 			await loadProjects();
-		} catch (err) {
-			error = 'Error adding project: ' + (err?.message || 'Unknown error');
+		} catch (err: any) {
+			error = `Error: ${err?.message || 'Unknown error'}`;
 		} finally {
 			loading = false;
+			uploading = false;
 		}
 	}
 
@@ -95,8 +188,38 @@
 			if (err) throw err;
 			success = 'Project deleted successfully!';
 			await loadProjects();
-		} catch (err) {
-			error = 'Error deleting project: ' + (err?.message || 'Unknown error');
+		} catch (err: any) {
+			error = `Error: ${err?.message || 'Unknown error'}`;
+		}
+	}
+
+	async function toggleFeatured(project: any) {
+		try {
+			const { error: err } = await supabase
+				.from('projects')
+				.update({ featured: !project.featured })
+				.eq('id', project.id);
+
+			if (err) throw err;
+			project.featured = !project.featured;
+			success = `Project ${project.featured ? 'marked as' : 'unmarked as'} featured!`;
+			await loadProjects();
+		} catch (err: any) {
+			error = `Error: ${err?.message || 'Unknown error'}`;
+		}
+	}
+
+	async function updateStatus(id: string, newStatus: string) {
+		try {
+			const { error: err } = await supabase
+				.from('projects')
+				.update({ status: newStatus })
+				.eq('id', id);
+
+			if (err) throw err;
+			await loadProjects();
+		} catch (err: any) {
+			error = `Error: ${err?.message || 'Unknown error'}`;
 		}
 	}
 
@@ -110,7 +233,7 @@
 	<div class="admin-dashboard">
 		<header class="admin-header">
 			<div class="header-content">
-				<h1>Admin Dashboard</h1>
+				<h1>📊 Project Management</h1>
 				<button on:click={handleLogout} class="logout-btn">Logout</button>
 			</div>
 		</header>
@@ -118,9 +241,24 @@
 		<main class="dashboard-main">
 			<div class="dashboard-container">
 				<div class="controls">
-					<h2>Projects Management</h2>
-					<button on:click={() => (showForm = !showForm)} class="btn-primary">
-						{showForm ? 'Cancel' : '+ Add New Project'}
+					<div class="controls-left">
+						<h2>Projects</h2>
+						<div class="filters">
+							<input
+								type="text"
+								placeholder="Filter by location..."
+								bind:value={filterLocation}
+								on:change={loadProjects}
+								class="filter-input"
+							/>
+							<select bind:value={sortBy} on:change={loadProjects} class="sort-select">
+								<option value="recent">Most Recent</option>
+								<option value="featured">Featured First</option>
+							</select>
+						</div>
+					</div>
+					<button on:click={() => { resetForm(); showForm = !showForm; }} class="btn-primary">
+						{showForm ? '✕ Cancel' : '+ Add New Project'}
 					</button>
 				</div>
 
@@ -134,16 +272,21 @@
 
 				{#if showForm}
 					<div class="form-section">
-						<h3>Add New Project</h3>
+						<h3>{editingId ? '✏️ Edit Project' : '➕ Add New Project'}</h3>
 						<form on:submit|preventDefault={handleSubmit}>
 							<div class="form-row">
 								<div class="form-group">
-									<label>Title *</label>
-									<input type="text" bind:value={formData.title} placeholder="Project name" />
+									<label for="title">Title *</label>
+									<input
+										id="title"
+										type="text"
+										bind:value={formData.title}
+										placeholder="Project name"
+									/>
 								</div>
 								<div class="form-group">
-									<label>Category</label>
-									<select bind:value={formData.category}>
+									<label for="category">Category</label>
+									<select id="category" bind:value={formData.category}>
 										<option value="Residential">Residential</option>
 										<option value="Commercial">Commercial</option>
 										<option value="Land">Land</option>
@@ -154,52 +297,107 @@
 							</div>
 
 							<div class="form-group">
-								<label>Description *</label>
+								<label for="description">Description *</label>
 								<textarea
+									id="description"
 									bind:value={formData.description}
 									placeholder="Detailed description of the property"
 									rows="4"
-								/>
+								></textarea>
 							</div>
 
 							<div class="form-row">
 								<div class="form-group">
-									<label>Location *</label>
-									<input type="text" bind:value={formData.location} placeholder="e.g., Westlands, Nairobi" />
+									<label for="location">Location *</label>
+									<input
+										id="location"
+										type="text"
+										bind:value={formData.location}
+										placeholder="e.g., Westlands, Nairobi"
+									/>
 								</div>
 								<div class="form-group">
-									<label>Price (KES) *</label>
-									<input type="number" bind:value={formData.price} placeholder="e.g., 5000000" />
+									<label for="price">Price (KES) *</label>
+									<input
+										id="price"
+										type="number"
+										bind:value={formData.price}
+										placeholder="e.g., 5000000"
+									/>
 								</div>
 							</div>
 
 							<div class="form-row">
 								<div class="form-group">
-									<label>Bedrooms</label>
-									<input type="number" bind:value={formData.bedrooms} placeholder="e.g., 3" />
+									<label for="bedrooms">Bedrooms</label>
+									<input
+										id="bedrooms"
+										type="number"
+										bind:value={formData.bedrooms}
+										placeholder="e.g., 3"
+									/>
 								</div>
 								<div class="form-group">
-									<label>Bathrooms</label>
-									<input type="number" bind:value={formData.bathrooms} placeholder="e.g., 2" />
+									<label for="bathrooms">Bathrooms</label>
+									<input
+										id="bathrooms"
+										type="number"
+										bind:value={formData.bathrooms}
+										placeholder="e.g., 2"
+									/>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label>Image URL *</label>
+								<label for="imageFile">Property Image</label>
 								<input
-									type="url"
-									bind:value={formData.imageUrl}
-									placeholder="https://example.com/image.jpg"
+									id="imageFile"
+									type="file"
+									accept="image/*"
+									on:change={handleImageUpload}
+									class="file-input"
+									disabled={uploading}
 								/>
-								{#if formData.imageUrl}
+								{#if imagePreview}
 									<div class="image-preview">
-										<img src={formData.imageUrl} alt="Preview" />
+										<img src={imagePreview} alt="Preview" />
 									</div>
 								{/if}
 							</div>
 
-							<button type="submit" class="btn-submit" disabled={loading}>
-								{loading ? 'Adding...' : 'Add Project'}
+							<div class="form-group">
+								<label for="amenities">Amenities</label>
+								<input
+									id="amenities"
+									type="text"
+									bind:value={formData.amenities}
+									placeholder="e.g., Swimming Pool, Gym, Garden, Parking"
+								/>
+							</div>
+
+							<div class="form-row">
+								<div class="form-group">
+									<label for="status">Status</label>
+									<select id="status" bind:value={formData.status}>
+										<option value="published">Published</option>
+										<option value="draft">Draft</option>
+										<option value="sold">Sold</option>
+									</select>
+								</div>
+								<div class="form-group checkbox-group">
+									<label for="featured">
+										<input
+											id="featured"
+											type="checkbox"
+											bind:checked={formData.featured}
+										/>
+										<span>Mark as Featured ⭐</span>
+									</label>
+								</div>
+							</div>
+
+							<button type="submit" class="btn-submit" disabled={loading || uploading}>
+								{loading ? 'Saving...' : uploading ? 'Uploading...' : editingId ? 'Save Changes' : 'Add Project'}
 							</button>
 						</form>
 					</div>
@@ -209,28 +407,69 @@
 					<h3>All Projects ({projects.length})</h3>
 
 					{#if projects.length === 0}
-						<p class="no-projects">No projects added yet. Click "Add New Project" to get started.</p>
+						<p class="no-projects">
+							{filterLocation ? 'No projects found in that location.' : 'No projects added yet.'}
+							Click "Add New Project" to get started.
+						</p>
 					{:else}
 						<div class="projects-grid">
 							{#each projects as project (project.id)}
-								<div class="project-card">
+								<div class="project-card" class:featured={project.featured} class:sold={project.status === 'sold'}>
+									{#if project.featured}
+										<div class="featured-badge">⭐ Featured</div>
+									{/if}
+									{#if project.status === 'sold'}
+										<div class="sold-badge">SOLD</div>
+									{/if}
 									<img src={project.imageUrl} alt={project.title} class="project-image" />
 									<div class="project-info">
 										<h4>{project.title}</h4>
 										<p class="category">{project.category}</p>
-										<p class="location">{project.location}</p>
+										<p class="location">📍 {project.location}</p>
 										<p class="price">KES {parseInt(project.price).toLocaleString()}</p>
-										{#if project.bedrooms}
+										{#if project.bedrooms || project.bathrooms}
 											<p class="specs">
-												🛏️ {project.bedrooms} Beds | 🚿 {project.bathrooms} Baths
+												🛏️ {project.bedrooms || '-'} Beds | 🚿 {project.bathrooms || '-'} Baths
 											</p>
 										{/if}
-										<button
-											on:click={() => deleteProject(project.id)}
-											class="btn-delete"
-										>
-											Delete
-										</button>
+										{#if project.amenities}
+											<p class="amenities" title={project.amenities}>🏠 {project.amenities}</p>
+										{/if}
+										<div class="status-select">
+											<select 
+												value={project.status} 
+												on:change={(e) => updateStatus(project.id, e.currentTarget.value)}
+												class="status-dropdown"
+											>
+												<option value="published">Published</option>
+												<option value="draft">Draft</option>
+												<option value="sold">Sold</option>
+											</select>
+										</div>
+										<div class="action-buttons">
+											<button
+												on:click={() => openEditForm(project)}
+												class="btn-edit"
+												title="Edit project"
+											>
+												✏️ Edit
+											</button>
+											<button
+												on:click={() => toggleFeatured(project)}
+												class="btn-featured"
+												class:active={project.featured}
+												title={project.featured ? 'Remove from featured' : 'Mark as featured'}
+											>
+												⭐
+											</button>
+											<button
+												on:click={() => deleteProject(project.id)}
+												class="btn-delete"
+												title="Delete project"
+											>
+												🗑️
+											</button>
+										</div>
 									</div>
 								</div>
 							{/each}
@@ -249,14 +488,14 @@
 	}
 
 	.admin-header {
-		background: #1f1810;
+		background: linear-gradient(135deg, #1f1810 0%, #3d2f25 100%);
 		color: white;
 		padding: 20px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 	}
 
 	.header-content {
-		max-width: 1300px;
+		max-width: 1400px;
 		margin: 0 auto;
 		display: flex;
 		justify-content: space-between;
@@ -265,22 +504,23 @@
 
 	.header-content h1 {
 		margin: 0;
-		font-size: 24px;
+		font-size: 28px;
 	}
 
 	.logout-btn {
 		background: #d4af37;
 		color: #1f1810;
-		padding: 8px 16px;
+		padding: 10px 20px;
 		border: none;
 		border-radius: 4px;
 		cursor: pointer;
 		font-weight: 600;
-		transition: background 0.3s;
+		transition: all 0.3s;
 	}
 
 	.logout-btn:hover {
 		background: #efbe5c;
+		transform: translateY(-2px);
 	}
 
 	.dashboard-main {
@@ -288,7 +528,7 @@
 	}
 
 	.dashboard-container {
-		max-width: 1300px;
+		max-width: 1400px;
 		margin: 0 auto;
 	}
 
@@ -297,44 +537,79 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 30px;
+		gap: 20px;
 	}
 
-	.controls h2 {
-		margin: 0;
+	.controls-left {
+		flex: 1;
+	}
+
+	.controls-left h2 {
+		margin: 0 0 15px 0;
 		color: #1f1810;
 	}
 
+	.filters {
+		display: flex;
+		gap: 10px;
+	}
+
+	.filter-input,
+	.sort-select {
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 14px;
+		background: white;
+	}
+
+	.filter-input {
+		flex: 1;
+		max-width: 300px;
+	}
+
+	.filter-input:focus,
+	.sort-select:focus {
+		outline: none;
+		border-color: #0066cc;
+		box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+	}
+
 	.btn-primary {
-		background: #0066cc;
+		background: linear-gradient(135deg, #0066cc, #0052a3);
 		color: white;
-		padding: 10px 20px;
+		padding: 12px 24px;
 		border: none;
 		border-radius: 4px;
 		cursor: pointer;
 		font-weight: 600;
-		transition: background 0.3s;
+		transition: all 0.3s;
+		white-space: nowrap;
 	}
 
 	.btn-primary:hover {
-		background: #0052a3;
+		background: linear-gradient(135deg, #0052a3, #003d7a);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
 	}
 
 	.alert {
 		padding: 15px;
 		border-radius: 4px;
 		margin-bottom: 20px;
+		font-weight: 500;
 	}
 
 	.alert-success {
-		background: #efe;
-		color: #060;
-		border: 1px solid #080;
+		background: #d4edda;
+		color: #155724;
+		border: 1px solid #c3e6cb;
 	}
 
 	.alert-error {
-		background: #fee;
-		color: #c33;
-		border: 1px solid #f00;
+		background: #f8d7da;
+		color: #721c24;
+		border: 1px solid #f5c6cb;
 	}
 
 	.form-section {
@@ -343,6 +618,7 @@
 		border-radius: 8px;
 		margin-bottom: 30px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		border-left: 4px solid #0066cc;
 	}
 
 	.form-section h3 {
@@ -387,29 +663,65 @@
 		box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
 	}
 
+	.file-input {
+		padding: 8px !important;
+		cursor: pointer;
+	}
+
+	.file-input:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
 	.image-preview {
-		margin-top: 10px;
-		max-width: 200px;
+		margin-top: 15px;
+		max-width: 250px;
+		border-radius: 4px;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	.image-preview img {
 		width: 100%;
-		border-radius: 4px;
+		height: auto;
+		display: block;
+	}
+
+	.checkbox-group {
+		display: flex;
+		align-items: center;
+	}
+
+	.checkbox-group label {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin: 0;
+		cursor: pointer;
+		font-weight: 600;
+	}
+
+	.checkbox-group input[type="checkbox"] {
+		width: auto;
+		cursor: pointer;
 	}
 
 	.btn-submit {
-		background: #0066cc;
+		background: linear-gradient(135deg, #0066cc, #0052a3);
 		color: white;
-		padding: 12px 24px;
+		padding: 12px 32px;
 		border: none;
 		border-radius: 4px;
 		cursor: pointer;
 		font-weight: 600;
-		transition: background 0.3s;
+		font-size: 16px;
+		transition: all 0.3s;
 	}
 
 	.btn-submit:hover:not(:disabled) {
-		background: #0052a3;
+		background: linear-gradient(135deg, #0052a3, #003d7a);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
 	}
 
 	.btn-submit:disabled {
@@ -433,11 +745,12 @@
 		text-align: center;
 		color: #999;
 		padding: 40px 20px;
+		font-style: italic;
 	}
 
 	.projects-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 		gap: 20px;
 	}
 
@@ -445,16 +758,54 @@
 		border: 1px solid #ddd;
 		border-radius: 8px;
 		overflow: hidden;
-		transition: box-shadow 0.3s;
+		transition: all 0.3s;
+		position: relative;
+		background: white;
 	}
 
 	.project-card:hover {
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+		transform: translateY(-4px);
+	}
+
+	.project-card.featured {
+		border-color: #d4af37;
+		border-width: 2px;
+	}
+
+	.project-card.sold {
+		opacity: 0.75;
+	}
+
+	.featured-badge {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		background: rgba(212, 175, 55, 0.95);
+		color: white;
+		padding: 6px 12px;
+		border-radius: 20px;
+		font-size: 12px;
+		font-weight: 600;
+		z-index: 10;
+	}
+
+	.sold-badge {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: rgba(220, 53, 69, 0.95);
+		color: white;
+		padding: 8px 12px;
+		border-radius: 4px;
+		font-size: 11px;
+		font-weight: 700;
+		z-index: 10;
 	}
 
 	.project-image {
 		width: 100%;
-		height: 200px;
+		height: 220px;
 		object-fit: cover;
 	}
 
@@ -463,15 +814,16 @@
 	}
 
 	.project-info h4 {
-		margin: 0 0 5px 0;
+		margin: 0 0 8px 0;
 		color: #1f1810;
+		font-size: 16px;
 	}
 
 	.category {
 		display: inline-block;
 		background: #d4af37;
 		color: #1f1810;
-		padding: 4px 8px;
+		padding: 4px 10px;
 		border-radius: 4px;
 		font-size: 12px;
 		font-weight: 600;
@@ -482,30 +834,98 @@
 	.price,
 	.specs {
 		margin: 5px 0;
-		font-size: 14px;
-		color: #666;
+		font-size: 13px;
+		color: #555;
 	}
 
 	.price {
-		font-weight: 600;
+		font-weight: 700;
 		color: #0066cc;
+		font-size: 16px;
 	}
 
-	.btn-delete {
+	.amenities {
+		font-size: 12px;
+		color: #666;
+		margin: 8px 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.status-select {
+		margin: 10px 0;
+	}
+
+	.status-dropdown {
 		width: 100%;
-		background: #dc3545;
-		color: white;
+		padding: 6px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 12px;
+		cursor: pointer;
+	}
+
+	.status-dropdown:focus {
+		outline: none;
+		border-color: #0066cc;
+	}
+
+	.action-buttons {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 8px;
+		margin-top: 12px;
+	}
+
+	.btn-edit,
+	.btn-featured,
+	.btn-delete {
 		padding: 8px;
-		border: none;
+		border: 1px solid #ddd;
 		border-radius: 4px;
 		cursor: pointer;
 		font-weight: 600;
-		margin-top: 10px;
-		transition: background 0.3s;
+		font-size: 12px;
+		transition: all 0.3s;
+	}
+
+	.btn-edit {
+		background: #e8f4f8;
+		color: #0066cc;
+		border-color: #0066cc;
+	}
+
+	.btn-edit:hover {
+		background: #0066cc;
+		color: white;
+	}
+
+	.btn-featured {
+		background: white;
+		color: #d4af37;
+		border-color: #d4af37;
+	}
+
+	.btn-featured.active {
+		background: #d4af37;
+		color: white;
+	}
+
+	.btn-featured:hover {
+		background: #d4af37;
+		color: white;
+	}
+
+	.btn-delete {
+		background: #ffebee;
+		color: #dc3545;
+		border-color: #dc3545;
 	}
 
 	.btn-delete:hover {
-		background: #c82333;
+		background: #dc3545;
+		color: white;
 	}
 
 	@media (max-width: 768px) {
@@ -513,14 +933,39 @@
 			grid-template-columns: 1fr;
 		}
 
-		.projects-grid {
-			grid-template-columns: 1fr;
+		.filters {
+			flex-direction: column;
 		}
 
 		.controls {
 			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.header-content {
+			flex-direction: column;
 			gap: 15px;
-			align-items: flex-start;
+			text-align: center;
+		}
+
+		.header-content h1 {
+			font-size: 22px;
+		}
+
+		.btn-primary {
+			width: 100%;
+		}
+
+		.action-buttons {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		.btn-delete {
+			grid-column: 1 / -1;
 		}
 	}
 </style>

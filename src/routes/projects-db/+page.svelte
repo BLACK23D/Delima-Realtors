@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { supabase } from '$lib/supabase';
 	import { onMount } from 'svelte';
 
-	let projects = [];
+	let projects: any[] = [];
 	let loading = true;
 
 	onMount(async () => {
@@ -53,17 +53,17 @@
 						<!-- Project Item Start -->
 						<div class="project-item wow fadeInUp">
 							<div class="project-img">
-								<a href="#" data-cursor-text="View">
+								<button style="background: none; border: none; padding: 0; cursor: pointer; width: 100%;" data-cursor-text="View">
 									<figure class="image-anime">
 										<img src={project.imageUrl} alt={project.title} />
 									</figure>
-								</a>
+								</button>
 							</div>
 							<div class="project-title">
 								<div
 									style="display: flex; justify-content: space-between; align-items: center;"
 								>
-									<h3><a href="#">{project.title}</a></h3>
+									<h3><button style="background: none; border: none; padding: 0; cursor: pointer; color: inherit; font: inherit; text-align: left;">{project.title}</button></h3>
 									<span
 										style="background: #d4af37; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;"
 									>
@@ -86,7 +86,7 @@
 								</p>
 							</div>
 							<div class="project-btn">
-								<a href="#"><img src="/lib/assets/arrow-white.svg" alt="" /></a>
+								<button style="background: none; border: none; padding: 0; cursor: pointer;"><img src="/lib/assets/arrow-white.svg" alt="" /></button>
 							</div>
 						</div>
 						<!-- Project Item End -->
