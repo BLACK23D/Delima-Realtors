@@ -4,7 +4,7 @@
 		<div class="loading-container">
 			<div class="loading"></div>
 			<div id="loading-icon">
-				<img src="/lib/assets/loader.svg" alt=""></div>
+				<img src="/lib/assets/logo/LogoMakerCa-1771232657338-removebg-preview.png" alt="Delima Realtors Logo"></div>
 		</div>
 	</div>
 	<!-- Preloader End -->
@@ -39,7 +39,7 @@
                                 <img src="/lib/assets/icon-white-phone.svg" alt="">
                             </div>
                             <div class="header-contact-box-content">
-                                <h3><a href="tel:789987645">+254 727 523 752</a></h3>                                
+                                <h3><a href="tel:+254727523752">+254 727 523 752</a></h3>                                
                             </div>
                         </div>
                         <!-- Header Contact Box End -->

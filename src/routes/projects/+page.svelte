@@ -20,7 +20,7 @@
                         <div class="project-img">
                             <a href="project-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="/lib/assets/ project-1.jpg" alt="">
+                                    <img src="/lib/assets/project-1.jpg" alt="">
                                 </figure>
                             </a>
                         </div>                        

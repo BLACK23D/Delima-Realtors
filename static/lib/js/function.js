@@ -5,8 +5,45 @@
 	var $body = $('body'); 
 
 	/* Preloader Effect */
+	var preloaderTimeout;
+	
+	function hidePreloader() {
+		clearTimeout(preloaderTimeout);
+		$(".preloader").fadeOut(300);
+	}
+	
+	function showAndHidePreloader() {
+		$(".preloader").fadeIn(100);
+		clearTimeout(preloaderTimeout);
+		preloaderTimeout = setTimeout(function(){
+			hidePreloader();
+		}, 800);
+	}
+	
+	// Hide preloader on window load
 	$window.on('load', function(){
-		$(".preloader").fadeOut(600);
+		hidePreloader();
+	});
+	
+	// Initial preloader hide
+	preloaderTimeout = setTimeout(function(){
+		hidePreloader();
+	}, 1200);
+	
+	// Listen for SvelteKit navigation and manage preloader
+	$(document).on('click', 'a[href*="/"]', function() {
+		var href = $(this).attr('href');
+		// Only show preloader for internal navigation
+		if (!href.startsWith('http') && !href.startsWith('#')) {
+			showAndHidePreloader();
+		}
+	});
+	
+	// Also handle page visibility - hide preloader if page becomes visible
+	document.addEventListener('visibilitychange', function() {
+		if (document.visibilityState === 'visible') {
+			hidePreloader();
+		}
 	});
 
 	/* Sticky Header */	

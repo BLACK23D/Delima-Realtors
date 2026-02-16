@@ -44,10 +44,12 @@
 /************************************/	
 
 :root{
-	--primary-color			: #191A1F;
+	--primary-color			: #1F1810;
 	--secondary-color		: #F9F9F9;
-	--text-color			: #808080;
-	--accent-color			: #ED6325;
+	--text-color			: #6B6B6B;
+	--accent-color			: #0066CC;
+	--accent-secondary		: #3399FF;
+	--orange-color			: #ED6325;
 	--white-color			: #FFFFFF;
 	--divider-color			: #80808024;
 	--dark-divider-color	: #FFFFFF1F;
@@ -217,7 +219,7 @@ body{
 	right: 0;
     width: 0;
     height: 100%;
-    background: var(--primary-color);
+    background: var(--orange-color);
 	border-radius: 0;
     transition: all 0.4s ease-in-out;
     z-index: -1;
@@ -305,8 +307,16 @@ body{
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	max-width: 66px;
+	max-width: 100px;
+	width: 100px;
+	height: auto;
 	transform: translate(-50%, -50%);
+}
+
+#loading-icon img{
+	width: 100%;
+	height: auto;
+	object-fit: contain;
 }
 
 @keyframes rotate-loading{
@@ -427,6 +437,8 @@ header.main-header{
 	width: 100%;
 	border-bottom: 1px solid var(--dark-divider-color);
 	z-index: 100;
+	background: rgba(31, 24, 16, 0.15);
+	backdrop-filter: blur(10px);
 }
 
 header.main-header .header-sticky{
@@ -453,7 +465,7 @@ header.main-header .header-sticky.active{
 }
 
 .navbar{
-	padding: 25px 0;
+	padding: 10px 0;
 	align-items: center;
 }
 
@@ -462,11 +474,11 @@ header.main-header .header-sticky.active{
 	margin: 0;
 	display: flex;
 	align-items: center;
-	height: 85px;
+	height: 140px;
 }
 
 .navbar-brand img{
-	height: 80px;
+	height: 130px;
 	width: auto;
 	object-fit: contain;
 	max-width: 100%;
@@ -489,13 +501,17 @@ header.main-header .header-sticky.active{
 }
 
 .main-menu ul li a{
-	font-size: 18px;
-	font-weight: 400;
+	font-size: 20px;
+	font-weight: 700;
 	line-height: 1.3em;
-	padding: 12px 15px !important;
-	color: var(--white-color);
+	padding: 16px 20px !important;
+	color: var(--primary-color);
 	text-transform: capitalize;
 	transition: all 0.3s ease-in-out;
+	position: relative;
+	border-bottom: 3px solid transparent;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+	letter-spacing: 0.5px;
 }
 
 .main-menu ul li.submenu > a:after{
@@ -509,6 +525,24 @@ header.main-header .header-sticky.active{
 .main-menu ul li a:hover,
 .main-menu ul li a:focus{
 	color: var(--accent-color);
+	border-bottom-color: var(--accent-color);
+	transform: translateY(-2px);
+	font-weight: 700;
+}
+
+/* Active/Sticky header styling - white text on dark background */
+header.main-header .header-sticky.active .main-menu ul li a{
+	color: var(--white-color);
+	border-bottom-color: transparent;
+	font-weight: 700;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+header.main-header .header-sticky.active .main-menu ul li a:hover,
+header.main-header .header-sticky.active .main-menu ul li a:focus{
+	color: var(--accent-color);
+	border-bottom-color: var(--accent-color);
+	transform: translateY(-2px);
 }
 
 .main-menu ul ul{
@@ -2303,9 +2337,9 @@ header.main-header .header-sticky.active{
 }
 
 .footer-logo img{
-    height: 85px;
+    height: 150px;
     width: auto;
-    max-width: 300px;
+    max-width: 500px;
     object-fit: contain;
 }
 
@@ -4185,7 +4219,7 @@ header.main-header .header-sticky.active{
 
 	.navbar-brand img{
 		max-width: none;
-		height: 70px;
+		height: 110px;
 		width: auto;
 	}
 

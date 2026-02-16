@@ -18,7 +18,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-1.jpg" alt="">
+                                    <img src="/lib/assets/amenities-1.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -28,7 +28,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">Personalized property matching</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-2.jpg" alt="">
+                                    <img src="/lib/assets/amenities-2.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -51,7 +51,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">ROI-focused guidance</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-3.jpg" alt="">
+                                    <img src="/lib/assets/amenities-3.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -74,7 +74,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">Full transaction coordination</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-4.jpg" alt="">
+                                    <img src="/lib/assets/amenities-4.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -97,7 +97,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">Real-time market insights</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-5.jpg" alt="">
+                                    <img src="/lib/assets/amenities-5.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -120,7 +120,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">Mortgage & loan guidance</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                         <div class="amenities-img">
                             <a href="amenities-single.html" data-cursor-text="View">
                                 <figure class="image-anime">
-                                    <img src="images/amenities-6.jpg" alt="">
+                                    <img src="/lib/assets/amenities-6.jpg" alt="">
                                 </figure>
                             </a>
                         </div>
@@ -143,7 +143,7 @@
                                 <p style="color: #999; font-size: 0.85rem; margin-top: 5px;">Seamless moving assistance</p>
                             </div>
                             <div class="amenities-btn">
-                                <a href="amenities-single.html"><img src="images/arrow-white.svg" alt=""></a>
+                                <a href="amenities-single.html"><img src="/lib/assets/arrow-white.svg" alt=""></a>
                             </div>
                         </div>
                     </div>

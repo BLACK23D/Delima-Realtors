@@ -103,7 +103,7 @@
 
                                 <div class="about-contact-content">
                                     <p>call us 24/7</p>
-                                    <h3><a href="tel:+254700000000">+254 700 000 000</a></h3>
+                                    <h3><a href="tel:+254727523752">+254 727 523 752</a></h3>
                                 </div>
                             </div>
                             <!-- About Contact Box End -->

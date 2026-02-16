@@ -18,7 +18,7 @@
                     <!-- Contact Info Item Start -->
                     <div class="contact-info-item wow fadeInUp">
                         <div class="icon-box">
-                            <img src="images/icon-location.svg" alt="">
+                            <img src="/lib/assets/icon-location.svg" alt="">
                         </div>
                         <div class="contact-info-content">
                             <h3>nairobi headquarters</h3>
@@ -33,11 +33,11 @@
                     <!-- Contact Info Item Start -->
                     <div class="contact-info-item wow fadeInUp" data-wow-delay="0.25s">
                         <div class="icon-box">
-                            <img src="images/icon-phone.svg" alt="">
+                            <img src="/lib/assets/icon-phone.svg" alt="">
                         </div>
                         <div class="contact-info-content">
                             <h3>call us 24/7</h3>
-                            <p>+254 701 432 884</p>
+                            <p>+254 727 523 752</p>
                             <p>Property Inquiries & Support</p>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                     <!-- Contact Info Item Start -->
                     <div class="contact-info-item wow fadeInUp" data-wow-delay="0.5s">
                         <div class="icon-box">
-                            <img src="images/icon-email.svg" alt="">
+                            <img src="/lib/assets/icon-email.svg" alt="">
                         </div>
                         <div class="contact-info-content">
                             <h3>e-mail us</h3>

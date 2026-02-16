@@ -20,7 +20,7 @@
                         <!-- Footer Contact Info Start -->
                         <div class="footer-contact-info">
                             <h2><a href="#/">info@delimarealtors.com</a></h2>
-                            <h3><a href="tel:254701432884">+254 701 432 884</a></h3>
+                            <h3><a href="tel:+254727523752">+254 727 523 752</a></h3>
                             <p>Argwings Kodhek Road, Kilimani, Nairobi 00100, Kenya</p>
                             <p style="font-size: 0.85rem; color: #999; margin-top: 8px;">Serving Nairobi's Premier Neighborhoods: Westlands, Karen, Kilimani, Muthaiga, Runda & More</p>
                         </div>
