@@ -69,6 +69,7 @@ body{
 	line-height: 1em;
 	background-color: var(--white-color);
 	color: var(--text-color);
+	padding-top: 0;
 }
 
 p{
@@ -432,13 +433,14 @@ body{
 /************************************/
 
 header.main-header{
-	position: absolute;
+	position: sticky;
 	top: 0;
 	width: 100%;
 	border-bottom: 1px solid var(--dark-divider-color);
 	z-index: 100;
 	background: rgba(31, 24, 16, 0.15);
 	backdrop-filter: blur(10px);
+	height: auto;
 }
 
 header.main-header .header-sticky{
@@ -448,8 +450,9 @@ header.main-header .header-sticky{
 }
 
 header.main-header .header-sticky.hide{
-	transform: translateY(-100%);
-	transition: transform 0.3s ease-in-out;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.4s ease-in-out;
 	border-radius: 0;
 }
 
@@ -781,6 +784,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 	background-size: cover;
     padding: 350px 0 280px;
     overflow: hidden;
+	margin-top: 0;
 }
 
 .hero::before{
@@ -962,6 +966,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 	background-position: right center;
 	background-size: auto;
 	padding: 100px 0;
+	padding-top: 80px;
 }
 
 .about-us-images{
@@ -2736,6 +2741,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-amenities{
     padding: 100px 0 70px;
+    padding-top: 80px;
 }
 
 .our-amenities-item{
@@ -3135,6 +3141,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-project{
     padding: 100px 0 70px;
+    padding-top: 80px;
 }
 
 .project-item{
@@ -4034,6 +4041,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-contact-us{
     padding: 100px 0 70px;
+    padding-top: 80px;
 }
 
 .contact-info-item{
@@ -4321,6 +4329,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 	
 	.about-us{
 		padding: 50px 0;
+		padding-top: 60px;
 	}
 
 	.about-us-images{
@@ -4711,6 +4720,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-amenities{
         padding: 50px 0 20px;
+        padding-top: 60px;
     }
 
 	.amenities-img img{
@@ -4816,6 +4826,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-project{
         padding: 50px 0 20px;
+        padding-top: 60px;
     }
 
 	.project-img img{
@@ -5006,6 +5017,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-contact-us{
         padding: 50px 0 20px;
+        padding-top: 60px;
     }
 
     .contact-info-item{
