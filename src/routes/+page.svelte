@@ -1,4 +1,3 @@
-<main>
 
     <!-- Preloader Start -->
 	<div class="preloader">
@@ -1619,4 +1618,3 @@
         </div>
     </div>
     <!-- Our Blog Section End -->
-</main>

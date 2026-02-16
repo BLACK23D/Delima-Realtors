@@ -70,6 +70,11 @@ body{
 	background-color: var(--white-color);
 	color: var(--text-color);
 	padding-top: 0;
+	margin-top: 0;
+}
+
+main{
+	padding-top: 0;
 }
 
 p{
@@ -447,12 +452,14 @@ header.main-header .header-sticky{
 	position: relative;
 	top: 0;
 	z-index: 100;
+	transition: transform 0.3s ease-in-out, max-height 0.3s ease-in-out;
 }
 
 header.main-header .header-sticky.hide{
+	transform: translateY(-100%);
 	max-height: 0;
 	overflow: hidden;
-	transition: max-height 0.4s ease-in-out;
+	transition: transform 0.3s ease-in-out, max-height 0.3s ease-in-out;
 	border-radius: 0;
 }
 
@@ -468,8 +475,11 @@ header.main-header .header-sticky.active{
 }
 
 .navbar{
-	padding: 10px 0;
+	padding: 0;
 	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	height: 150px;
 }
 
 .navbar-brand{
@@ -477,11 +487,11 @@ header.main-header .header-sticky.active{
 	margin: 0;
 	display: flex;
 	align-items: center;
-	height: 140px;
+	height: 150px;
 }
 
 .navbar-brand img{
-	height: 130px;
+	height: 140px;
 	width: auto;
 	object-fit: contain;
 	max-width: 100%;
@@ -966,7 +976,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 	background-position: right center;
 	background-size: auto;
 	padding: 100px 0;
-	padding-top: 80px;
+	padding-top: 100px;
 }
 
 .about-us-images{
@@ -2741,7 +2751,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-amenities{
     padding: 100px 0 70px;
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 .our-amenities-item{
@@ -3141,7 +3151,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-project{
     padding: 100px 0 70px;
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 .project-item{
@@ -4041,7 +4051,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 .page-contact-us{
     padding: 100px 0 70px;
-    padding-top: 80px;
+    padding-top: 100px;
 }
 
 .contact-info-item{
@@ -4329,7 +4339,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 	
 	.about-us{
 		padding: 50px 0;
-		padding-top: 60px;
+		padding-top: 80px;
 	}
 
 	.about-us-images{
@@ -4720,7 +4730,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-amenities{
         padding: 50px 0 20px;
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
 	.amenities-img img{
@@ -4826,7 +4836,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-project{
         padding: 50px 0 20px;
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
 	.project-img img{
@@ -5017,7 +5027,7 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
 
 	.page-contact-us{
         padding: 50px 0 20px;
-        padding-top: 60px;
+        padding-top: 80px;
     }
 
     .contact-info-item{
@@ -5852,5 +5862,9 @@ header.main-header .header-sticky.active .main-menu ul li a:focus{
     .google-map-iframe,
 	.google-map-iframe iframe{
 		height: 350px;
+	}
+
+	main{
+		padding-top: 0;
 	}
 }
